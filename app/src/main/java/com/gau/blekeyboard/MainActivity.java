@@ -52,11 +52,6 @@ public class MainActivity extends AppCompatActivity {
     // / qpp start
     protected static String uuidQppService = "0000fee9-0000-1000-8000-00805f9b34fb";
     protected static String uuidQppCharWrite = "d44bc439-abfd-45a2-b575-925416129600";
-//    public static byte[] uuidQppCharWrite = new byte[]{0x00, (byte) 0x96, 0x12, 0x16, 0x54, (byte) 0x92, 0x75, (byte) 0xB5,
-//            (byte) 0xA2, 0x45, (byte) 0xFD, (byte) 0xAB, 0x39, (byte) 0xC4, 0x4B, (byte) 0xD4};
-//
-//    public static byte[] uuidQppService = new byte[]{(byte) 0xFB, 0x34, (byte) 0x9B, 0x5F, (byte) 0x80, 0x00, 0x00, (byte) 0x80,
-//            0x00, 0x10, 0x00, 0x00, (byte) 0xE9, (byte) 0xFE, 0x00, 0x00};
 
     // / receive data
     private TextView textQppNotify;
@@ -290,7 +285,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qpp);
-//        getActionBar().setTitle(R.string.title_version);
 
         textDeviceName = (TextView) findViewById(R.id.text_device_name);
         textDeviceAddress = (TextView) findViewById(R.id.text_device_address);
@@ -303,6 +297,13 @@ public class MainActivity extends AppCompatActivity {
         textQppNotify = (TextView) findViewById(R.id.text_qpp_notify);
         textQppDataRate = (TextView) findViewById(R.id.text_qpp_data_rate);
 
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        for (BluetoothDevice device : adapter.getBondedDevices()) {
+            if (device.getName().equals("BLE-KeyBoard")) {
+                mDeviceName = device.getName();
+                mDeviceAddress = device.getAddress();
+            }
+        }
         textDeviceName.setText(mDeviceName);
         textDeviceAddress.setText(mDeviceAddress);
 
@@ -355,6 +356,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
     }
 
     @Override
