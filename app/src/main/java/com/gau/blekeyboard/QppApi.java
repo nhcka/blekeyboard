@@ -164,6 +164,7 @@ public class QppApi {
 
 		try {
 			BluetoothGattDescriptor descriptor = characteristic.getDescriptor(UUID.fromString(UUIDDes));
+			characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
 			if (descriptor != null) {
 				descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
 				return (bluetoothGatt.writeDescriptor(descriptor));
